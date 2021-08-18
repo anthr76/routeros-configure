@@ -1,0 +1,5 @@
+---
+
+system:
+  vlan-filtering: true
+  hostname: "ansible-routeros"

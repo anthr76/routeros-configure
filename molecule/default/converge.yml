@@ -1,0 +1,7 @@
+---
+- name: Converge
+  hosts: all
+  tasks:
+    - name: "include routeros-configure"
+      include_role:
+        name: "routeros-configure"
