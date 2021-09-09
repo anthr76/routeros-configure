@@ -5,9 +5,4 @@ jobs:
   molecule:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-        with:
-          path: "${{ github.repository }}"
       - uses: gofrolist/molecule-action@v2
-        with:
-          molecule_args: --driver-name docker
