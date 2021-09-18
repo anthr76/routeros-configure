@@ -5,7 +5,7 @@
     commands:
       - /interface bridge port add bridge={{ interface.bridge.name }} interface={{ loop_port }}
       - /interface bridge vlan set bridge={{ interface.bridge.name }} tagged={{ loop_port }} [find vlan-ids={{ loop_vlan }}]
-  loop: "{{ interface.trunk.phys }}"
+  loop: "{{ interface.bridge.trunk.phys }}"
   vars:
     loop_port: "{{ item.port }}"
     loop_vlan: "{{ item.pvid | dict2items }}"
