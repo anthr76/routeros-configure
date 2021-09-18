@@ -1,26 +1,32 @@
 ---
 
-- name: create bridge without filtering to prevent lockout
-    community.routeros.command:
-    commands:
-        - /interface bridge add name={{ interface.bridge.name }} protocol-mode= {{ interface.bridge.protocol-mode }} vlan-filtering=no
+- name: create bridge
+  community.routeros.command:
+  commands:
+      - >
+        /interface bridge add name={{ interface.bridge.name }}
+        protocol-mode={{ interface.bridge.protocol-mode }}
+        vlan-filtering={{ 'yes' if interface.bridge.vlan-filtering else 'no' }}
 
 - name: configure switch ports
-    community.routeros.command:
-    commands:
-        - /interface bridge port add bridge={{ loop_bridge }} interface={{ loop_port }} pvid={{ loop_vlan }}
-        - /interface bridge vlan add bridge={{ loop_bridge }} untagged={{ loop_port }} vlan-ids={{ item.phys.pvid }}
-        - /interface ethernet set {{ loop_port }} comment="{{ loop_comment }}"
-  with_items: "{{ interface.phys }}"
+  community.routeros.command:
+  commands:
+      - /interface bridge port add bridge={{ loop_bridge }} interface={{ loop_port }} pvid={{ loop_vlan }}
+      - /interface bridge vlan add bridge={{ loop_bridge }} untagged={{ loop_port }} vlan-ids={{ item.phys.pvid }}
+      - /interface ethernet set {{ loop_port }} comment="{{ loop_comment }}"
+  loop: "{{ interface.phys }}"
   vars:
     loop_port: "{{ item.phys.port }}"
     loop_vlan: "{{ item.phys.pvid }}"
     loop_comment: "{{ item.phys.comment | default('configured by Ansible') }}"
     loop_bridge: "{{ interface.bridge.name }}"
 
-- name: enable vlan filtering
+- name: set vlan security
   community.routeros.command:
-    commands:
-      - /interface bridge set {{ interface.bridge.name }} vlan-filtering=yes
+  commands:
+      - /interface bridge port set bridge=bridge ingress-filtering=yes frame-types=admit-only-untagged-and-priority-tagged [find interface={{ loop_port }}]
+  with_items: "{{ interface.phys }}"
+  vars:
+    loop_port: "{{ item.phys.port }}"
   when:
-    - system.vlan-filtering
+    - item.phys.vlan-secured

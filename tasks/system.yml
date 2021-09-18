@@ -1,7 +1,7 @@
 ---
 
 - name: set system identity
-    community.routeros.command:
+  community.routeros.command:
     commands:
         - /system identity set name="{{ system.hostname }}"
 
