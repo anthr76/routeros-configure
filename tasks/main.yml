@@ -1,1 +1,7 @@
 ---
+
+- include_tasks: system.yml
+
+- include_tasks: trunk.yml
+
+- include_tasks: switch.yml

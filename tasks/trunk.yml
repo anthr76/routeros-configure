@@ -3,8 +3,8 @@
 - name: configure trunks
   community.routeros.command:
   commands:
-    - /interface bridge port add bridge=bridge interface={{ loop_port }}
-    - /interface bridge vlan set bridge=bridge tagged={{ loop_port }} [find vlan-ids={{ loop_vlan }}]
+    - /interface bridge port add bridge={{ interface.bridge.name }} interface={{ loop_port }}
+    - /interface bridge vlan set bridge={{ interface.bridge.name }} tagged={{ loop_port }} [find vlan-ids={{ loop_vlan }}]
   loop: "{{ interface.trunk.phys }}"
   vars:
     loop_port: "{{ item.phys.port }}"
@@ -13,7 +13,7 @@
 - name: set vlan security
   community.routeros.command:
   commands:
-      - /interface bridge port set bridge=bridge ingress-filtering=yes frame-types=admit-only-vlan-tagged [find interface={{ loop_port }}]
+      - /interface bridge port set bridge={{ interface.bridge.name }} ingress-filtering=yes frame-types=admit-only-vlan-tagged [find interface={{ loop_port }}]
   with_items: "{{ interface.trunk.phys }}"
   vars:
     loop_port: "{{ item.phys.port }}"
