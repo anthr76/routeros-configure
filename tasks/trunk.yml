@@ -8,7 +8,7 @@
       - /interface ethernet set {{ loop_port }} comment="{{ loop_comment }}"
   loop: "{{ interface.bridge.trunk.phys }}"
   loop_control:
-    loop_var: "{{ interface.bridge.trunk.phys.port }}"
+    loop_var: "{{ interface.bridge.trunk.phys }}"
   vars:
     loop_port: "{{ item.port }}"
     loop_vlan: "{{ item.pvid }}"
