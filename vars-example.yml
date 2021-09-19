@@ -15,7 +15,7 @@ interface:
   bridge:
     name: bridge
     protocol-mode: rstp
-    vlan-filtering: false
+    vlan_filtering: false
     phys:
       - port: sfp-plus2
         pvid: 100

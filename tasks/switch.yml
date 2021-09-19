@@ -32,4 +32,4 @@
   vars:
     loop_port: "{{ item.port }}"
   when:
-    - interface.bridge.vlan-filtering == true
+    - interface.bridge.vlan_filtering == true
