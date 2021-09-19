@@ -1,6 +1,6 @@
 ---
 
-- name: create bridge
+- name: switch | create bridge
   community.routeros.command:
   commands:
       - >
@@ -8,25 +8,28 @@
         protocol-mode={{ interface.bridge.protocol-mode }}
         vlan-filtering={{ 'yes' if interface.bridge.vlan-filtering else 'no' }}
 
-- name: configure switch ports
+- name: switch |configure switch ports
   community.routeros.command:
   commands:
       - /interface bridge port add bridge={{ loop_bridge }} interface={{ loop_port }} pvid={{ loop_vlan }}
-      - /interface bridge vlan add bridge={{ loop_bridge }} untagged={{ loop_port }} vlan-ids={{ item.phys.pvid }}
+      - /interface bridge vlan add bridge={{ loop_bridge }} untagged={{ loop_port }} vlan-ids={{ loop_vlan }}
       - /interface ethernet set {{ loop_port }} comment="{{ loop_comment }}"
-  loop: "{{ interface.phys }}"
+  loop: "{{ interface.bridge.phys }}"
   vars:
-    loop_port: "{{ item.phys.port }}"
-    loop_vlan: "{{ item.phys.pvid }}"
-    loop_comment: "{{ item.phys.comment | default('configured by Ansible') }}"
+    loop_port: "{{ item.port }}"
+    loop_vlan: "{{ item.pvid }}"
+    loop_comment: "{{ item.comment | default('configured by Ansible') }}"
     loop_bridge: "{{ interface.bridge.name }}"
 
-- name: set vlan security
+- name: switch | set vlan security
   community.routeros.command:
   commands:
-      - /interface bridge port set bridge=bridge ingress-filtering=yes frame-types=admit-only-untagged-and-priority-tagged [find interface={{ loop_port }}]
-  with_items: "{{ interface.phys }}"
+      - >
+        /interface bridge port set bridge={{ interface.bridge.name }} 
+        ingress-filtering=yes frame-types=admit-only-untagged-and-priority-tagged 
+        [find interface={{ loop_port }}]
+  loop: "{{ interface.bridge.phys }}"
   vars:
-    loop_port: "{{ item.phys.port }}"
+    loop_port: "{{ item.port }}"
   when:
-    - item.phys.vlan-secured
+    - interface.bridge.vlan-filtering

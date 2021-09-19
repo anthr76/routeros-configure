@@ -20,9 +20,8 @@ interface:
       - port: sfp-plus2
         pvid: 100
         comment: desktop-pc
-        vlan-secured: true
     trunk:
       phys:
         - port: ether1
           pvid: [8,99,10,100,101]
-          vlan-secured: false
+          comment: "from-firewall"

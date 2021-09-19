@@ -5,10 +5,12 @@
     commands:
       - /interface bridge port add bridge={{ interface.bridge.name }} interface={{ loop_port }}
       - /interface bridge vlan set bridge={{ interface.bridge.name }} tagged={{ loop_port }} [find vlan-ids={{ loop_vlan }}]
+      - /interface ethernet set {{ loop_port }} comment="{{ loop_comment }}"
   loop: "{{ interface.bridge.trunk.phys }}"
   vars:
     loop_port: "{{ item.port }}"
     loop_vlan: "{{ item.pvid }}"
+    loop_comment: "{{ item.comment | default('configured by Ansible') }}"
 
 - name: trunk | set vlan security
   community.routeros.command:
@@ -18,4 +20,4 @@
   vars:
     loop_port: "{{ item.port }}"
   when:
-    - item.vlan-secured
+    - item.interface.bridge.vlan-filtering
