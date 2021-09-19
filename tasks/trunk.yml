@@ -4,7 +4,7 @@
   community.routeros.command:
     commands:
       - /interface bridge port add bridge={{ interface.bridge.name }} interface={{ loop_port }}
-      - /interface bridge vlan set bridge={{ interface.bridge.name }} tagged={{ loop_port }} [find vlan-ids={{ loop_vlan }}]
+      #- /interface bridge vlan set bridge={{ interface.bridge.name }} tagged={{ loop_port }} [find vlan-ids={{ loop_vlan }}]
       - /interface ethernet set {{ loop_port }} comment="{{ loop_comment }}"
   loop: "{{ interface.bridge.trunk.phys }}"
   vars:
