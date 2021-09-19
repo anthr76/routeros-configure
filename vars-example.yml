@@ -23,5 +23,10 @@ interface:
     trunk:
       phys:
         - port: ether1
-          pvid: [8,99,10,100,101]
+          base_vlan: 99
           comment: "from-firewall"
+      supplement_vlans:
+        - port: ether1
+          pvid: 100
+        - port: ether1
+          pvid: 10
