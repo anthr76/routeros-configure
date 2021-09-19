@@ -18,4 +18,4 @@
   vars:
     loop_port: "{{ item.port }}"
   when:
-    - item.bridge.phys.item.vlan-secured
+    - item.vlan-secured
