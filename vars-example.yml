@@ -25,3 +25,4 @@ interface:
       phys:
         - port: ether1
           pvid: [8,99,10,100,101]
+          vlan-secured: false
