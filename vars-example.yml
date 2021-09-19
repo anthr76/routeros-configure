@@ -5,7 +5,7 @@ system:
   timezone: "America/New_York"
   ntp:
     enabled: false
-    server-dns-names: ""
+    server_dns_names: ""
   interface:
     mgmt:
       pvid: 99
@@ -14,12 +14,12 @@ system:
 interface:
   bridge:
     name: bridge
-    protocol-mode: rstp
+    protocol_mode: rstp
     vlan_filtering: false
     phys:
-      - port: sfp-plus2
+      - port: "sfp-plus2"
         pvid: 100
-        comment: desktop-pc
+        comment: "desktop-pc"
     trunk:
       phys:
         - port: ether1

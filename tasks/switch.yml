@@ -5,8 +5,8 @@
     commands:
         - >
           /interface bridge add name={{ interface.bridge.name }}
-          protocol-mode={{ interface.bridge.protocol-mode }}
-          vlan-filtering={{ 'yes' if interface.bridge.vlan-filtering else 'no' }}
+          protocol-mode={{ interface.bridge.protocol_mode }}
+          vlan-filtering={{ 'yes' if interface.bridge.vlan_filtering else 'no' }}
 
 - name: switch |configure switch ports
   community.routeros.command:
